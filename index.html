@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Control G202 (archivo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eceff2;
+  --surface: #ffffff;
+  --surface-2: #e2e7eb;
+  --text: #1a2127;
+  --muted: #56626d;
+  --line: #cdd5db;
+  --accent: #f2b705;
+  --accent-ink: #1a2127;
+  --accent-text: #8a6400;
+  --ok: #1d7a46;
+  --warn: #b3261e;
+  --screen: #11181d;
+  --screen-text: #c9f2d6;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12171b;
+    --surface: #1c2329;
+    --surface-2: #28313a;
+    --text: #e8edf1;
+    --muted: #9aa7b2;
+    --line: #34404a;
+    --accent-text: #f2c94c;
+    --ok: #5fcf8e;
+    --warn: #ff8a80;
+    --screen: #0a0f12;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12171b;
+  --surface: #1c2329;
+  --surface-2: #28313a;
+  --text: #e8edf1;
+  --muted: #9aa7b2;
+  --line: #34404a;
+  --accent-text: #f2c94c;
+  --ok: #5fcf8e;
+  --warn: #ff8a80;
+  --screen: #0a0f12;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  padding-bottom: 92px;
+  -webkit-text-size-adjust: 100%;
+}
+.stripe {
+  height: 8px;
+  background: repeating-linear-gradient(135deg, var(--accent) 0 12px, #1a2127 12px 24px);
+}
+header { padding: 18px 18px 6px; max-width: 640px; margin: 0 auto; }
+h1 {
+  font-family: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+  font-weight: 700; font-size: 30px; line-height: 1.1; margin: 0 0 4px; letter-spacing: 0.2px;
+}
+header p { margin: 0; color: var(--muted); font-size: 15px; }
+main { max-width: 640px; margin: 0 auto; padding: 10px 14px 20px; }
+h2 {
+  font-family: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+  font-weight: 600; font-size: 21px; margin: 22px 0 8px;
+}
+h3 { font-size: 16px; font-weight: 600; margin: 16px 0 6px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.hint { color: var(--muted); font-size: 14px; margin: 4px 0 10px; }
+.banner {
+  background: var(--surface);
+  border: 1px solid var(--warn);
+  color: var(--warn);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+label { display: block; font-size: 14px; font-weight: 500; margin: 10px 0 4px; }
+input, select, textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 12px;
+  min-height: 46px;
+}
+textarea { min-height: 120px; font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13px; line-height: 1.4; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 2px;
+}
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row > * { flex: 1 1 auto; }
+.grid2 { display: grid; grid-template-columns: 1fr 96px; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; text-align: center;
+  font: inherit; font-weight: 600; font-size: 15px;
+  min-height: 46px; padding: 10px 14px;
+  border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--text);
+  text-decoration: none; cursor: pointer;
+}
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.danger { color: var(--warn); }
+.btn.small { min-height: 40px; padding: 6px 12px; font-size: 14px; }
+.btn[disabled] { opacity: .5; }
+.user { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; }
+.pos {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-weight: 500; font-size: 20px;
+  background: var(--screen); color: var(--screen-text);
+  border-radius: 6px; text-align: center; padding: 8px 0;
+}
+.user .name { font-weight: 600; font-size: 17px; }
+.user .num { color: var(--muted); font-size: 15px; word-break: break-all; }
+.chip {
+  display: inline-block; font-size: 13px; font-weight: 500;
+  padding: 2px 10px; border-radius: 99px; border: 1px solid var(--line);
+  background: transparent; color: var(--muted); cursor: pointer; margin-top: 4px;
+}
+.chip.on { color: var(--ok); border-color: var(--ok); }
+.user .actions { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; }
+.user .actions .btn { flex: 1 1 auto; }
+.empty { text-align: center; color: var(--muted); padding: 22px 12px; }
+.btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.btnrow.one { grid-template-columns: 1fr; }
+.btnrow.three { grid-template-columns: 1fr 1fr 1fr; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 4px 14px 14px; margin-bottom: 10px; }
+summary { cursor: pointer; font-weight: 600; padding: 12px 0 8px; }
+nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--surface); border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+nav button {
+  font: inherit; font-weight: 600; font-size: 14px;
+  background: none; border: 0; color: var(--muted);
+  padding: 14px 4px 12px; min-height: 56px; cursor: pointer;
+  border-top: 4px solid transparent; margin-top: -1px;
+}
+nav button[aria-selected="true"] { color: var(--text); border-top-color: var(--accent); }
+.view { display: none; }
+.view.active { display: block; }
+/* hoja de comando */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 40; display: none; align-items: flex-end; justify-content: center; }
+.overlay.open { display: flex; }
+.sheet {
+  width: 100%; max-width: 640px; background: var(--surface);
+  border-radius: 16px 16px 0 0; padding: 18px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  max-height: 90%; overflow-y: auto;
+  animation: up .18s ease-out;
+}
+@keyframes up { from { transform: translateY(24px); opacity: .6; } to { transform: none; opacity: 1; } }
+.sheet h3 { margin: 0 0 4px; font-size: 20px; font-family: "Barlow Semi Condensed", "Barlow", sans-serif; }
+.sheet .note { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
+.screen {
+  background: var(--screen); color: var(--screen-text);
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-weight: 500;
+  font-size: 17px; padding: 14px; border-radius: 8px; word-break: break-all;
+  border: 2px solid var(--line);
+}
+.dest { font-size: 14px; color: var(--muted); margin: 8px 0 12px; }
+.sheet .stack { display: grid; gap: 8px; }
+.sheet .stack .btn.primary { order: -1; }
+#toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 84px; z-index: 60;
+  background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 8px;
+  font-size: 14px; font-weight: 500; max-width: 90%; display: none; text-align: center;
+}
+@media (prefers-reduced-motion: reduce) { .sheet { animation: none; } .btn:active { transform: none; } }
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"></div>
+<header>
+  <h1>Control G202</h1>
+  <p id="headSub">Arma los comandos SMS del abridor GSM sin escribirlos a mano.</p>
+</header>
+
+<main>
+  <div id="storageWarn" class="banner" hidden>Este navegador no permite guardar datos. Lo que ingreses se perderá al cerrar la página. Usa la pestaña Respaldo para copiar tu lista.</div>
+
+  <!-- USUARIOS -->
+  <section id="v-users" class="view active">
+    <h2 id="formTitle">Agregar usuario</h2>
+    <div class="card">
+      <label for="fName">Nombre (solo para ti)</label>
+      <input id="fName" type="text" placeholder="Ej: Ana, portería, vecino 12" autocomplete="off">
+      <div class="grid2">
+        <div>
+          <label for="fNum">Número de celular</label>
+          <input id="fNum" type="tel" inputmode="tel" placeholder="9 1234 5678" autocomplete="off">
+        </div>
+        <div>
+          <label for="fPos">Posición</label>
+          <input id="fPos" type="number" inputmode="numeric" min="1" max="200" value="1">
+        </div>
+      </div>
+      <p class="hint">Si no escribes código de país, se agrega el configurado. La posición 001 es el administrador y recibe las confirmaciones.</p>
+      <div class="btnrow">
+        <button class="btn" data-action="saveUser" id="btnSave">Guardar en lista</button>
+        <button class="btn primary" data-action="saveLoad" id="btnSaveLoad">Guardar y cargar</button>
+      </div>
+      <div class="btnrow one" id="cancelRow" hidden>
+        <button class="btn" data-action="cancelEdit">Cancelar edición</button>
+      </div>
+    </div>
+
+    <h2>Consultar posiciones del equipo</h2>
+    <div class="card">
+      <p class="hint" style="margin-top:0">El equipo solo permite consultar una posición por SMS. La app te guía de una en una y guarda cada respuesta en tu lista. Sirve para recuperar los números que ya están cargados.</p>
+      <div class="row">
+        <div>
+          <label for="qFrom">Desde la posición</label>
+          <input id="qFrom" type="number" inputmode="numeric" min="1" max="200" value="1">
+        </div>
+        <div>
+          <label for="qTo">Hasta la posición</label>
+          <input id="qTo" type="number" inputmode="numeric" min="1" max="200" value="10">
+        </div>
+      </div>
+      <div class="btnrow one">
+        <button class="btn primary" data-action="queryRange">Empezar consulta</button>
+      </div>
+    </div>
+
+    <h2>Mis usuarios</h2>
+    <p class="hint" id="summary"></p>
+    <input id="filter" type="search" placeholder="Buscar por nombre, número o posición" hidden>
+    <div id="userList" style="margin-top:10px"></div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section id="v-equipo" class="view">
+    <h2>Abrir</h2>
+    <div class="card">
+      <p class="hint" style="margin-top:0">Llamar desde un número autorizado abre el portón sin costo. Desde aquí puedes llamar al equipo directamente.</p>
+      <div class="btnrow one">
+        <a class="btn primary" id="callBtn" href="#" data-action="call">Llamar al equipo</a>
+      </div>
+      <div class="btnrow">
+        <button class="btn" data-action="cmd" data-key="ON">Activar relé por SMS</button>
+        <button class="btn" data-action="cmd" data-key="OFF">Desactivar relé por SMS</button>
+      </div>
+    </div>
+
+    <h2>Tiempo del relé</h2>
+    <div class="card">
+      <label for="gotSel">Tiempo que se mantiene activo</label>
+      <select id="gotSel"></select>
+      <p class="hint">De fábrica es 0,5 s. El modo “alternar” deja el relé encendido hasta la próxima llamada, útil para equipos que quieres prender o apagar por tiempos largos.</p>
+      <div class="btnrow">
+        <button class="btn primary" data-action="got">Aplicar tiempo</button>
+        <button class="btn" data-action="cmd" data-key="LATCH">Modo alternar</button>
+      </div>
+      <div class="btnrow one">
+        <button class="btn" data-action="cmd" data-key="GOTQ">Consultar tiempo actual</button>
+      </div>
+    </div>
+
+    <h2>Quién puede abrir</h2>
+    <div class="card">
+      <div class="btnrow">
+        <button class="btn" data-action="cmd" data-key="AU">Solo autorizados</button>
+        <button class="btn" data-action="cmd" data-key="AA">Cualquiera</button>
+      </div>
+      <div class="btnrow one">
+        <button class="btn" data-action="cmd" data-key="AC">Consultar modo actual</button>
+      </div>
+    </div>
+
+    <h2>Diagnóstico</h2>
+    <div class="card">
+      <div class="btnrow">
+        <button class="btn" data-action="cmd" data-key="CSQ">Calidad de señal</button>
+        <button class="btn" data-action="cmd" data-key="M">Ver confirmaciones</button>
+      </div>
+      <div class="btnrow one">
+        <button class="btn" data-action="cmd" data-key="R">Activar SMS de confirmación</button>
+      </div>
+      <p class="hint">La señal va de 0 a 31. Lo recomendado es más de 16; bajo 12 conviene una antena externa.</p>
+    </div>
+
+    <h2>Clave del equipo</h2>
+    <div class="card">
+      <label for="newPw">Nueva clave (4 dígitos)</label>
+      <input id="newPw" type="text" inputmode="numeric" maxlength="8" placeholder="Ej: 7777" autocomplete="off">
+      <div class="btnrow one">
+        <button class="btn" data-action="pwd">Preparar cambio de clave</button>
+      </div>
+    </div>
+
+    <details>
+      <summary>Solo versión 4G</summary>
+      <p class="hint">Estos comandos vienen del manual del G202 4G. En tu modelo 3G pueden no funcionar y responder “Error de comando”.</p>
+      <div class="btnrow">
+        <button class="btn" data-action="cmd" data-key="IMEI">Consultar IMEI</button>
+        <button class="btn" data-action="cmd" data-key="AL">Estado entradas</button>
+        <button class="btn" data-action="cmd" data-key="EA">Habilitar entradas</button>
+        <button class="btn" data-action="cmd" data-key="DA">Deshabilitar entradas</button>
+      </div>
+      <div class="btnrow one">
+        <button class="btn" data-action="cmd" data-key="N">Desactivar SMS de confirmación</button>
+      </div>
+      <p class="hint">En la versión 4G el tiempo del relé usa cuatro dígitos (por ejemplo GOT0019).</p>
+      <div class="btnrow one">
+        <button class="btn" data-action="got4">Aplicar tiempo seleccionado (formato 4G)</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>Zona de riesgo</summary>
+      <p class="hint">Devuelve el equipo a valores de fábrica: se borran todos los usuarios y la clave vuelve a ser 1234.</p>
+      <div class="btnrow one">
+        <button class="btn danger" data-action="cmd" data-key="RESET">Restablecer de fábrica</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- RESPALDO -->
+  <section id="v-backup" class="view">
+    <h2>Exportar lista de números</h2>
+    <div class="card">
+      <p class="hint" style="margin-top:0">Texto separado por punto y coma. Puedes pegarlo en Excel, Google Sheets o enviarlo por WhatsApp o correo.</p>
+      <textarea id="csvOut" readonly aria-label="Lista de usuarios en texto"></textarea>
+      <div class="btnrow">
+        <button class="btn primary" data-action="copyCsv">Copiar lista</button>
+        <button class="btn" data-action="shareCsv">Compartir</button>
+      </div>
+    </div>
+
+    <h2>Respaldo completo</h2>
+    <div class="card">
+      <p class="hint" style="margin-top:0">Incluye usuarios y configuración. Guarda la clave del equipo, así que guárdalo en un lugar privado.</p>
+      <textarea id="jsonOut" readonly aria-label="Respaldo completo"></textarea>
+      <div class="btnrow">
+        <button class="btn" data-action="copyJson">Copiar respaldo</button>
+        <button class="btn" data-action="shareJson">Compartir</button>
+      </div>
+    </div>
+
+    <h2>Importar</h2>
+    <div class="card">
+      <p class="hint" style="margin-top:0">Pega una lista (posicion;nombre;numero;cargado) o un respaldo completo.</p>
+      <textarea id="importIn" placeholder="Pega aquí" aria-label="Texto a importar"></textarea>
+      <div class="btnrow">
+        <button class="btn primary" data-action="importMerge">Combinar con mi lista</button>
+        <button class="btn danger" data-action="importReplace" id="btnReplace">Reemplazar mi lista</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIG -->
+  <section id="v-cfg" class="view">
+    <h2>Mi equipo</h2>
+    <div class="card">
+      <label for="cSim">Número de la SIM del G202</label>
+      <input id="cSim" type="tel" inputmode="tel" placeholder="9 8765 4321" autocomplete="off">
+      <label for="cPw">Clave del equipo</label>
+      <input id="cPw" type="text" inputmode="numeric" placeholder="1234" autocomplete="off">
+      <label for="cPre">Código de país por defecto</label>
+      <input id="cPre" type="text" placeholder="+56" autocomplete="off">
+      <p class="hint">Si el equipo no responde con “+56”, prueba con “0056”. El manual indica que algunos casos requieren ese formato.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Dónde se guardan tus datos</h3>
+      <p class="hint" style="margin-bottom:0">Todo queda en este navegador, en tu celular. No se envía a ningún servidor. Si borras los datos del navegador o cambias de teléfono, se pierden: por eso conviene copiar un respaldo de vez en cuando.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Cómo funciona el envío</h3>
+      <p class="hint" style="margin-bottom:0">La app prepara el SMS con el comando exacto y abre tu aplicación de mensajes. Tú solo presionas enviar. Si no se abre, copia el comando y pégalo en un mensaje nuevo.</p>
+    </div>
+  </section>
+</main>
+
+<nav role="tablist" aria-label="Secciones">
+  <button role="tab" aria-selected="true" data-tab="users">Usuarios</button>
+  <button role="tab" aria-selected="false" data-tab="equipo">Equipo</button>
+  <button role="tab" aria-selected="false" data-tab="backup">Respaldo</button>
+  <button role="tab" aria-selected="false" data-tab="cfg">Config</button>
+</nav>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <div class="sheet" id="sheet">
+    <h3 id="shTitle"></h3>
+    <p class="note" id="shNote"></p>
+    <div class="screen" id="shCmd"></div>
+    <p class="dest" id="shDest"></p>
+    <div class="stack" id="shBtns"></div>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var cfg = { sim: "", pw: "1234", prefix: "+56" };
+  var users = [];
+  var editingId = null;
+  var replaceArmed = false;
+  var storageOk = true;
+
+  /* ---------- almacenamiento ---------- */
+  function load() {
+    try { var c = localStorage.getItem("g202_cfg"); if (c) cfg = Object.assign(cfg, JSON.parse(c)); } catch (e) { storageOk = false; }
+    try { var u = localStorage.getItem("g202_users"); if (u) { var arr = JSON.parse(u); if (Array.isArray(arr)) users = arr; } } catch (e) { storageOk = false; }
+  }
+  function save() {
+    try {
+      localStorage.setItem("g202_cfg", JSON.stringify(cfg));
+      localStorage.setItem("g202_users", JSON.stringify(users));
+    } catch (e) { storageOk = false; $("#storageWarn").hidden = false; }
+  }
+
+  /* ---------- utilidades ---------- */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function pos3(n) { return String(n).padStart(3, "0"); }
+  function normNum(raw) {
+    var n = String(raw || "").replace(/[\s\-().]/g, "");
+    if (!n) return "";
+    if (n.charAt(0) === "+" || n.indexOf("00") === 0) return n;
+    return cfg.prefix + n.replace(/^0+/, "");
+  }
+  function validNum(n) { return /^(\+|00)?\d{8,15}$/.test(n); }
+  function nextFreePos() {
+    var used = {};
+    users.forEach(function (u) { used[u.pos] = true; });
+    for (var i = 1; i <= 200; i++) if (!used[i]) return i;
+    return 200;
+  }
+  function toast(msg) {
+    var t = $("#toast");
+    t.textContent = msg; t.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.style.display = "none"; }, 2800);
+  }
+  function copyText(text, okMsg) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      toast(ok ? okMsg : "No se pudo copiar. Selecciona el texto y cópialo a mano.");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
+    } else { fallback(); }
+  }
+  function shareText(title, text) {
+    if (navigator.share) {
+      navigator.share({ title: title, text: text }).catch(function () {});
+    } else { copyText(text, "Compartir no está disponible aquí. Se copió el texto."); }
+  }
+  function smsHref(body) {
+    var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    return "sms:" + cfg.sim + (ios ? "&" : "?") + "body=" + encodeURIComponent(body);
+  }
+
+  /* ---------- comandos ---------- */
+  function P() { return cfg.pw; }
+  var C = {
+    add: function (num, pos) { return P() + "#TEL" + num + "#" + pos3(pos) + "#"; },
+    ask: function (pos) { return P() + "#TEL" + pos3(pos) + "?"; },
+    del: function (pos) { return P() + "#TEL#" + pos3(pos) + "#"; },
+    AU: function () { return P() + "#AU#"; },
+    AA: function () { return P() + "#AA#"; },
+    AC: function () { return P() + "#AC?#"; },
+    ON: function () { return P() + "#ON#"; },
+    OFF: function () { return P() + "#OFF#"; },
+    LATCH: function () { return P() + "#GOT00#"; },
+    GOTQ: function () { return P() + "#GOT?"; },
+    CSQ: function () { return P() + "#CSQ?"; },
+    R: function () { return P() + "#R#"; },
+    M: function () { return P() + "#M?"; },
+    N: function () { return P() + "#N#"; },
+    IMEI: function () { return P() + "#IMEI?"; },
+    EA: function () { return P() + "#EA#"; },
+    DA: function () { return P() + "#DA#"; },
+    AL: function () { return P() + "#AL?"; },
+    RESET: function () { return P() + "#RESET#"; }
+  };
+  var INFO = {
+    AU: ["Solo números autorizados", "Solo los números de tu lista pueden abrir llamando. Es el ajuste de fábrica."],
+    AA: ["Que cualquiera pueda abrir", "Cualquier persona que llame a la SIM abrirá el portón. Úsalo solo si de verdad lo necesitas."],
+    AC: ["Consultar quién puede abrir", "El equipo responde con el modo que tiene activo."],
+    ON: ["Activar relé", "Activa el relé por SMS (abre el portón o enciende el equipo conectado)."],
+    OFF: ["Desactivar relé", "Desactiva el relé por SMS."],
+    LATCH: ["Modo alternar", "El relé quedará activo hasta la siguiente llamada, y solo responde a números autorizados."],
+    GOTQ: ["Consultar tiempo del relé", "El equipo responde con el tiempo configurado."],
+    CSQ: ["Calidad de señal", "Responde un valor de 0 a 31. Más de 16 es lo ideal."],
+    R: ["Activar SMS de confirmación", "Cada vez que el relé actúe, el equipo avisa al usuario de la posición 001."],
+    M: ["Ver confirmaciones", "El equipo responde si el SMS de confirmación está activo."],
+    N: ["Desactivar SMS de confirmación", "Comando del manual 4G. Puede no funcionar en el 3G."],
+    IMEI: ["Consultar IMEI", "Comando del manual 4G. Puede no funcionar en el 3G."],
+    EA: ["Habilitar entradas", "Comando del manual 4G. Puede no funcionar en el 3G."],
+    DA: ["Deshabilitar entradas", "Comando del manual 4G. Puede no funcionar en el 3G."],
+    AL: ["Estado de las entradas", "Comando del manual 4G. Puede no funcionar en el 3G."],
+    RESET: ["Restablecer de fábrica", "Se borran todos los usuarios y la clave vuelve a 1234. El manual indica que el equipo responde y se reinicia a los 3 minutos."]
+  };
+
+  /* ---------- hoja de comando ---------- */
+  function openSheet(o) {
+    if (!cfg.sim) {
+      toast("Primero ingresa el número de la SIM en Config");
+      switchTab("cfg");
+      return;
+    }
+    $("#shTitle").textContent = o.title;
+    $("#shNote").textContent = o.note || "";
+    $("#shCmd").textContent = o.cmd;
+    $("#shDest").textContent = "Se enviará a " + cfg.sim;
+    var box = $("#shBtns");
+    box.innerHTML = "";
+    var b = document.createElement("button");
+    b.className = "btn"; b.textContent = "Copiar comando";
+    b.onclick = function () { copyText(o.cmd, "Comando copiado. Pégalo en un mensaje nuevo"); };
+    box.appendChild(b);
+    var cn = document.createElement("button");
+    cn.className = "btn"; cn.textContent = "Copiar número de la SIM";
+    cn.onclick = function () { copyText(cfg.sim, "Número copiado"); };
+    box.appendChild(cn);
+    var a = document.createElement("a");
+    a.className = "btn primary"; a.href = smsHref(o.cmd); a.textContent = "Abrir en mensajes";
+    box.appendChild(a);
+    (o.extra || []).forEach(function (x) {
+      var e = document.createElement("button");
+      e.className = "btn" + (x.danger ? " danger" : ""); e.textContent = x.label;
+      e.onclick = function () { x.fn(); };
+      box.appendChild(e);
+    });
+    var c = document.createElement("button");
+    c.className = "btn"; c.textContent = "Cerrar";
+    c.onclick = closeSheet;
+    box.appendChild(c);
+    $("#overlay").classList.add("open");
+  }
+  function closeSheet() { $("#overlay").classList.remove("open"); }
+  $("#overlay").addEventListener("click", function (e) { if (e.target === this) closeSheet(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeSheet(); });
+
+  /* ---------- pestañas ---------- */
+  function switchTab(name) {
+    document.querySelectorAll(".view").forEach(function (v) { v.classList.toggle("active", v.id === "v-" + name); });
+    document.querySelectorAll("nav button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === name ? "true" : "false"); });
+    if (name === "backup") renderBackup();
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll("nav button").forEach(function (b) {
+    b.addEventListener("click", function () { switchTab(b.dataset.tab); });
+  });
+
+  /* ---------- usuarios ---------- */
+  function renderUsers() {
+    var q = ($("#filter").value || "").toLowerCase();
+    var sorted = users.slice().sort(function (a, b) { return a.pos - b.pos; });
+    var list = sorted.filter(function (u) {
+      return !q || u.name.toLowerCase().indexOf(q) > -1 || u.num.indexOf(q) > -1 || pos3(u.pos).indexOf(q) > -1;
+    });
+    var loaded = users.filter(function (u) { return u.loaded; }).length;
+    $("#summary").textContent = users.length
+      ? users.length + " de 200 posiciones usadas, " + loaded + " marcadas como cargadas en el equipo."
+      : "";
+    $("#filter").hidden = users.length < 8;
+    var box = $("#userList");
+    if (!list.length) {
+      box.innerHTML = users.length
+        ? "<div class=\"empty\">Ningún usuario coincide con la búsqueda.</div>"
+        : "<div class=\"empty\">Aún no hay usuarios. Agrega el primero arriba: la posición 001 debería ser el administrador.</div>";
+      return;
+    }
+    box.innerHTML = list.map(function (u) {
+      return "<div class=\"card user\">" +
+        "<div class=\"pos\">" + pos3(u.pos) + "</div>" +
+        "<div><div class=\"name\">" + esc(u.name || "Sin nombre") + "</div>" +
+        "<div class=\"num\">" + esc(u.num) + "</div>" +
+        "<button class=\"chip " + (u.loaded ? "on" : "") + "\" data-action=\"toggleLoaded\" data-id=\"" + u.id + "\">" +
+        (u.loaded ? "Cargado en el equipo" : "Pendiente de cargar") + "</button></div>" +
+        "<div class=\"actions\">" +
+        "<button class=\"btn small primary\" data-action=\"loadUser\" data-id=\"" + u.id + "\">Cargar</button>" +
+        "<button class=\"btn small\" data-action=\"askUser\" data-id=\"" + u.id + "\">Consultar</button>" +
+        "<button class=\"btn small\" data-action=\"editUser\" data-id=\"" + u.id + "\">Editar</button>" +
+        "<button class=\"btn small danger\" data-action=\"delUser\" data-id=\"" + u.id + "\">Eliminar</button>" +
+        "</div></div>";
+    }).join("");
+  }
+  function findUser(id) { return users.filter(function (u) { return String(u.id) === String(id); })[0]; }
+  function resetForm() {
+    editingId = null;
+    $("#fName").value = ""; $("#fNum").value = ""; $("#fPos").value = nextFreePos();
+    $("#formTitle").textContent = "Agregar usuario";
+    $("#btnSave").textContent = "Guardar en lista";
+    $("#btnSaveLoad").textContent = "Guardar y cargar";
+    $("#cancelRow").hidden = true;
+  }
+  function saveUser(andLoad) {
+    var name = $("#fName").value.trim();
+    var num = normNum($("#fNum").value);
+    var pos = parseInt($("#fPos").value, 10);
+    if (!validNum(num)) { toast("Revisa el número: debe tener entre 8 y 15 dígitos"); return; }
+    if (!(pos >= 1 && pos <= 200)) { toast("La posición va de 1 a 200"); return; }
+    var clash = users.filter(function (u) { return u.pos === pos && u.id !== editingId; })[0];
+    if (clash) { toast("La posición " + pos3(pos) + " ya la usa " + (clash.name || clash.num)); return; }
+    var u;
+    if (editingId) {
+      u = findUser(editingId);
+      if (u.num !== num || u.pos !== pos) u.loaded = false;
+      u.name = name; u.num = num; u.pos = pos;
+    } else {
+      u = { id: Date.now() + Math.floor(Math.random() * 1000), pos: pos, name: name, num: num, loaded: false };
+      users.push(u);
+    }
+    save(); resetForm(); renderUsers();
+    if (andLoad) loadUser(u.id); else toast("Guardado en la lista");
+  }
+  function loadUser(id) {
+    var u = findUser(id); if (!u) return;
+    openSheet({
+      title: "Cargar a " + (u.name || u.num),
+      note: "Registra este número en la posición " + pos3(u.pos) + (u.pos === 1 ? ". Es el administrador y recibirá las confirmaciones." : "."),
+      cmd: C.add(u.num, u.pos),
+      extra: [{ label: "Marcar como cargado", fn: function () { u.loaded = true; save(); renderUsers(); closeSheet(); toast("Marcado como cargado"); } }]
+    });
+  }
+  function askUser(id) {
+    var u = findUser(id); if (!u) return;
+    openSheet({ title: "Consultar posición " + pos3(u.pos), note: "El equipo responde qué número tiene guardado en esa posición.", cmd: C.ask(u.pos) });
+  }
+  function delUser(id) {
+    var u = findUser(id); if (!u) return;
+    openSheet({
+      title: "Eliminar a " + (u.name || u.num),
+      note: "Borra la posición " + pos3(u.pos) + " del equipo. Después puedes quitarlo también de tu lista.",
+      cmd: C.del(u.pos),
+      extra: [{
+        label: "Quitar de mi lista", danger: true,
+        fn: function () { users = users.filter(function (x) { return x.id !== u.id; }); save(); renderUsers(); resetFormIfEditing(u.id); closeSheet(); toast("Quitado de la lista"); }
+      }]
+    });
+  }
+  function resetFormIfEditing(id) { if (editingId === id) resetForm(); }
+  function editUser(id) {
+    var u = findUser(id); if (!u) return;
+    editingId = u.id;
+    $("#fName").value = u.name; $("#fNum").value = u.num; $("#fPos").value = u.pos;
+    $("#formTitle").textContent = "Editar usuario";
+    $("#btnSave").textContent = "Guardar cambios";
+    $("#btnSaveLoad").textContent = "Guardar y cargar";
+    $("#cancelRow").hidden = false;
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- consultar posiciones ---------- */
+  var Q = { from: 1, to: 1, cur: 1 };
+  function openQuery() {
+    var from = parseInt($("#qFrom").value, 10), to = parseInt($("#qTo").value, 10);
+    if (!cfg.sim) { toast("Primero ingresa el número de la SIM en Config"); switchTab("cfg"); return; }
+    if (!(from >= 1 && from <= 200) || !(to >= 1 && to <= 200) || to < from) {
+      toast("Indica un rango entre 1 y 200, de menor a mayor"); return;
+    }
+    Q.from = from; Q.to = to; Q.cur = from;
+    renderQuery();
+    $("#overlay").classList.add("open");
+  }
+  function queryNext() {
+    if (Q.cur >= Q.to) { closeSheet(); toast("Consulta terminada"); return; }
+    Q.cur++; renderQuery();
+  }
+  function saveAnswer() {
+    var raw = $("#qAns").value;
+    if (raw.indexOf(":") > -1) raw = raw.split(":").pop();
+    var num = normNum(raw);
+    if (!validNum(num)) { toast("Escribe el número tal como lo responde el equipo"); return; }
+    var u = users.filter(function (x) { return x.pos === Q.cur; })[0];
+    if (u) { u.num = num; u.loaded = true; }
+    else users.push({ id: Date.now() + Math.floor(Math.random() * 1000), pos: Q.cur, name: "", num: num, loaded: true });
+    save(); renderUsers();
+    if (!editingId) $("#fPos").value = nextFreePos();
+    queryNext();
+  }
+  function markEmpty() {
+    var u = users.filter(function (x) { return x.pos === Q.cur; })[0];
+    if (u) { u.loaded = false; save(); renderUsers(); }
+    queryNext();
+  }
+  function renderQuery() {
+    var pos = Q.cur, total = Q.to - Q.from + 1, n = pos - Q.from + 1;
+    var cmd = C.ask(pos);
+    var local = users.filter(function (x) { return x.pos === pos; })[0];
+    $("#shTitle").textContent = "Posición " + pos3(pos) + " (" + n + " de " + total + ")";
+    $("#shNote").textContent = "Envía el comando y espera la respuesta del equipo. Luego escribe abajo el número que responde para guardarlo en tu lista." +
+      (local ? " En tu lista esta posición es " + (local.name || "sin nombre") + ": " + local.num + "." : "");
+    $("#shCmd").textContent = cmd;
+    $("#shDest").textContent = "Se enviará a " + cfg.sim;
+    var box = $("#shBtns");
+    box.innerHTML = "";
+    var cp = document.createElement("button");
+    cp.className = "btn"; cp.textContent = "Copiar comando";
+    cp.onclick = function () { copyText(cmd, "Comando copiado. Pégalo en un mensaje nuevo"); };
+    box.appendChild(cp);
+    var cn2 = document.createElement("button");
+    cn2.className = "btn"; cn2.textContent = "Copiar número de la SIM";
+    cn2.onclick = function () { copyText(cfg.sim, "Número copiado"); };
+    box.appendChild(cn2);
+    var a = document.createElement("a");
+    a.className = "btn primary"; a.href = smsHref(cmd); a.textContent = "Abrir en mensajes";
+    box.appendChild(a);
+    var wrap = document.createElement("div");
+    wrap.innerHTML = "<label for=\"qAns\">Número que respondió el equipo</label>" +
+      "<input id=\"qAns\" type=\"tel\" inputmode=\"tel\" placeholder=\"Ej: 912345678\" autocomplete=\"off\">";
+    box.appendChild(wrap);
+    var sv = document.createElement("button");
+    sv.className = "btn primary"; sv.textContent = n < total ? "Guardar y siguiente" : "Guardar y terminar";
+    sv.onclick = saveAnswer;
+    box.appendChild(sv);
+    var em = document.createElement("button");
+    em.className = "btn"; em.textContent = "La posición está vacía";
+    em.onclick = markEmpty;
+    box.appendChild(em);
+    if (n > 1) {
+      var pv = document.createElement("button");
+      pv.className = "btn"; pv.textContent = "Volver a la anterior";
+      pv.onclick = function () { Q.cur--; renderQuery(); };
+      box.appendChild(pv);
+    }
+    var cl = document.createElement("button");
+    cl.className = "btn"; cl.textContent = "Cerrar";
+    cl.onclick = closeSheet;
+    box.appendChild(cl);
+  }
+
+  /* ---------- respaldo ---------- */
+  function buildCsv() {
+    var rows = users.slice().sort(function (a, b) { return a.pos - b.pos; }).map(function (u) {
+      return [u.pos, (u.name || "").replace(/;/g, ","), u.num, u.loaded ? "si" : "no"].join(";");
+    });
+    return ["posicion;nombre;numero;cargado"].concat(rows).join("\n");
+  }
+  function buildJson() { return JSON.stringify({ version: 1, cfg: cfg, users: users }, null, 1); }
+  function renderBackup() {
+    $("#csvOut").value = buildCsv();
+    $("#jsonOut").value = buildJson();
+    replaceArmed = false;
+    $("#btnReplace").textContent = "Reemplazar mi lista";
+  }
+  function cleanUser(u) {
+    var num = normNum(u.num);
+    var pos = parseInt(u.pos, 10);
+    if (!validNum(num) || !(pos >= 1 && pos <= 200)) return null;
+    return { id: Date.now() + Math.floor(Math.random() * 100000), pos: pos, name: String(u.name || "").trim(), num: num, loaded: !!u.loaded };
+  }
+  function parseImport(text) {
+    text = text.trim();
+    if (!text) throw new Error("Pega primero el contenido a importar");
+    var imported = [], skipped = 0, newCfg = null;
+    if (text.charAt(0) === "{") {
+      var o;
+      try { o = JSON.parse(text); } catch (e) { throw new Error("El respaldo no se pudo leer. Revisa que esté completo"); }
+      newCfg = o.cfg || null;
+      (o.users || []).forEach(function (u) { var c = cleanUser(u); if (c) imported.push(c); else skipped++; });
+    } else {
+      text.split(/\r?\n/).forEach(function (line, i) {
+        if (!line.trim()) return;
+        var sep = line.indexOf(";") > -1 ? ";" : (line.indexOf("\t") > -1 ? "\t" : ",");
+        var p = line.split(sep).map(function (s) { return s.trim(); });
+        if (i === 0 && /pos/i.test(p[0])) return;
+        var c = cleanUser({ pos: p[0], name: p[1], num: p[2], loaded: /^(si|sí|1|true)$/i.test(p[3] || "") });
+        if (c) imported.push(c); else skipped++;
+      });
+    }
+    return { users: imported, skipped: skipped, cfg: newCfg };
+  }
+  function doImport(replace) {
+    var r;
+    try { r = parseImport($("#importIn").value); } catch (e) { toast(e.message); return; }
+    if (!r.users.length) { toast("No se encontró ningún usuario válido"); return; }
+    if (replace) {
+      users = r.users;
+    } else {
+      r.users.forEach(function (n) {
+        var ex = users.filter(function (u) { return u.pos === n.pos; })[0];
+        if (ex) { ex.name = n.name; ex.num = n.num; ex.loaded = n.loaded; } else users.push(n);
+      });
+    }
+    if (r.cfg) {
+      if (r.cfg.sim !== undefined) cfg.sim = r.cfg.sim;
+      if (r.cfg.pw) cfg.pw = r.cfg.pw;
+      if (r.cfg.prefix) cfg.prefix = r.cfg.prefix;
+      fillCfg();
+    }
+    save(); renderUsers(); renderBackup(); resetForm();
+    $("#importIn").value = "";
+    toast("Importados " + r.users.length + " usuarios" + (r.skipped ? ", " + r.skipped + " omitidos por datos inválidos" : ""));
+  }
+
+  /* ---------- configuración ---------- */
+  function fillCfg() {
+    $("#cSim").value = cfg.sim; $("#cPw").value = cfg.pw; $("#cPre").value = cfg.prefix;
+    refreshHead();
+  }
+  function refreshHead() {
+    $("#headSub").textContent = cfg.sim ? "Equipo en " + cfg.sim : "Configura primero el número de la SIM del equipo.";
+    var a = $("#callBtn");
+    a.setAttribute("href", cfg.sim ? "tel:" + cfg.sim : "#");
+  }
+  $("#cSim").addEventListener("change", function () { cfg.sim = normNum(this.value); this.value = cfg.sim; save(); refreshHead(); });
+  $("#cPw").addEventListener("input", function () { cfg.pw = this.value.trim() || "1234"; save(); });
+  $("#cPre").addEventListener("change", function () { cfg.prefix = this.value.trim() || "+56"; this.value = cfg.prefix; save(); });
+  $("#filter").addEventListener("input", renderUsers);
+
+  /* ---------- tiempo del relé ---------- */
+  (function () {
+    var sel = $("#gotSel"), html = "";
+    for (var s = 0.5; s <= 9.5; s += 0.5) {
+      html += "<option value=\"" + Math.round(s * 2) + "\"" + (s === 0.5 ? " selected" : "") + ">" + String(s).replace(".", ",") + " segundos</option>";
+    }
+    sel.innerHTML = html;
+  })();
+
+  /* ---------- clics ---------- */
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-action]");
+    if (!t) return;
+    var act = t.dataset.action, id = t.dataset.id;
+    switch (act) {
+      case "saveUser": saveUser(false); break;
+      case "saveLoad": saveUser(true); break;
+      case "cancelEdit": resetForm(); break;
+      case "loadUser": loadUser(id); break;
+      case "askUser": askUser(id); break;
+      case "editUser": editUser(id); break;
+      case "delUser": delUser(id); break;
+      case "toggleLoaded":
+        var u = findUser(id); if (u) { u.loaded = !u.loaded; save(); renderUsers(); }
+        break;
+      case "call":
+        if (!cfg.sim) { e.preventDefault(); toast("Primero ingresa el número de la SIM en Config"); switchTab("cfg"); }
+        break;
+      case "cmd":
+        var k = t.dataset.key, info = INFO[k];
+        openSheet({ title: info[0], note: info[1], cmd: C[k]() });
+        break;
+      case "got":
+        var v = $("#gotSel").value;
+        openSheet({
+          title: "Tiempo del relé: " + $("#gotSel").selectedOptions[0].textContent,
+          note: "El equipo usa el doble del número como décimas de segundo: el valor " + v + " equivale a " + (v / 2).toString().replace(".", ",") + " s.",
+          cmd: P() + "#GOT" + String(v).padStart(2, "0") + "#"
+        });
+        break;
+      case "got4":
+        var v4 = $("#gotSel").value;
+        openSheet({
+          title: "Tiempo del relé (formato 4G)",
+          note: "Usa cuatro dígitos, como en el manual 4G. En el 3G puede dar error.",
+          cmd: P() + "#GOT" + String(v4).padStart(4, "0") + "#"
+        });
+        break;
+      case "pwd":
+        var np = $("#newPw").value.trim();
+        if (!/^\d{4,8}$/.test(np)) { toast("La clave debe ser numérica, de 4 dígitos"); break; }
+        openSheet({
+          title: "Cambiar clave del equipo",
+          note: "Después de enviarlo, guarda la nueva clave en la app para que los próximos comandos la usen.",
+          cmd: P() + "#PWD" + np + "#PWD" + np + "#",
+          extra: [{ label: "Guardar la nueva clave en la app", fn: function () { cfg.pw = np; save(); fillCfg(); $("#newPw").value = ""; closeSheet(); toast("Clave guardada en la app"); } }]
+        });
+        break;
+      case "queryRange": openQuery(); break;
+      case "copyCsv": copyText($("#csvOut").value, "Lista copiada"); break;
+      case "shareCsv": shareText("Usuarios G202", $("#csvOut").value); break;
+      case "copyJson": copyText($("#jsonOut").value, "Respaldo copiado"); break;
+      case "shareJson": shareText("Respaldo G202", $("#jsonOut").value); break;
+      case "importMerge": doImport(false); break;
+      case "importReplace":
+        if (!replaceArmed) { replaceArmed = true; t.textContent = "Toca otra vez para confirmar"; }
+        else { replaceArmed = false; t.textContent = "Reemplazar mi lista"; doImport(true); }
+        break;
+    }
+  });
+
+  /* ---------- inicio ---------- */
+  load();
+  fillCfg();
+  resetForm();
+  renderUsers();
+  if (!storageOk) $("#storageWarn").hidden = false;
+})();
+</script>
+</body>
+</html>
